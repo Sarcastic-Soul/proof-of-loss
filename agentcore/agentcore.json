@@ -1,0 +1,34 @@
+{
+  "name": "proofofloss",
+  "version": 2,
+  "managedBy": "CDK",
+  "runtimes": [
+    {
+      "name": "ProofOfLoss",
+      "build": "CodeZip",
+      "entrypoint": "main.py",
+      "codeLocation": "agent",
+      "runtimeVersion": "PYTHON_3_13",
+      "protocol": "HTTP",
+      "envVars": [
+        {
+          "name": "POL_BACKEND",
+          "value": "aws"
+        },
+        {
+          "name": "POL_MODEL_ID",
+          "value": "us.amazon.nova-pro-v1:0"
+        }
+      ]
+    }
+  ],
+  "memories": [],
+  "knowledgeBases": [],
+  "credentials": [],
+  "evaluators": [],
+  "onlineEvalConfigs": [],
+  "agentCoreGateways": [],
+  "policyEngines": [],
+  "configBundles": [],
+  "harnesses": []
+}

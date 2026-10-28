@@ -167,7 +167,9 @@ def make_tools(ctx: ClaimContext) -> list:
         claim["packet_key"] = key
         claim["status"] = "packet_ready"
         ctx.save(claim)
-        return {"packet_url": ctx.blobs.url(key),
+        # No URL here: signed links are long and the model would copy them into
+        # its reply. The app shows the farmer an "Open claim packet" button.
+        return {"packet_ready": True,
                 "deadline": evidence.deadline_info(claim["loss"]["loss_date"],
                                                    claim["loss"]["time_of_day"], ctx.now),
                 "next_step": config.PMFBY_CHANNELS}

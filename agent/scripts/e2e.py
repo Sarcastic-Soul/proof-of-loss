@@ -15,6 +15,7 @@ from PIL import Image
 sys.path.insert(0, str(Path(__file__).parents[1] / "tests"))
 from helpers import jpeg_with_exif  # noqa: E402
 
+from proof_of_loss import config  # noqa: E402
 from proof_of_loss.service import handle_turn  # noqa: E402
 from proof_of_loss.store import LocalBlobStore, LocalClaimStore  # noqa: E402
 
@@ -31,7 +32,7 @@ def field_photo(taken: str, lat: float, lon: float) -> str:
 
 
 def run(name: str, turns: list[dict]):
-    claims, blobs = LocalClaimStore(".data/e2e"), LocalBlobStore(".data/e2e")
+    claims, blobs = LocalClaimStore(f"{config.DATA_DIR}/e2e"), LocalBlobStore(f"{config.DATA_DIR}/e2e")
     claim_id = f"{name}-{uuid.uuid4().hex[:6]}"
     print(f"\n===== {name} ({claim_id})")
     for t in turns:

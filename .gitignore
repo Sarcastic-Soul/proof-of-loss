@@ -5,3 +5,11 @@ __pycache__/
 .data/
 .env*
 !.env.example
+
+# AgentCore CLI
+agentcore/.cli/*
+!agentcore/.cli/deployed-state.json
+agentcore/.cache/
+agentcore/cdk/cdk.out/
+agentcore/cdk/dist/
+node_modules/

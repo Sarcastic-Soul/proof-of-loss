@@ -6,6 +6,8 @@ Shared by the AgentCore entrypoint (app.py) and the local CLI.
 import base64
 from datetime import datetime
 
+from strands.types.exceptions import MaxTokensReachedException
+
 from . import config, evidence
 from .agent import build_agent, clean_reply
 from .checklist import gate_problems
@@ -82,9 +84,13 @@ def handle_turn(claim_id: str, message: str, claims: ClaimStore, blobs: BlobStor
         notes.append(hint)
     prompt = "\n".join(notes + [message]).strip() or "(no text)"
     agent = build_agent(ctx, model=model)
-    result = agent(prompt)
+    try:
+        text = clean_reply(str(agent(prompt)))
+    except MaxTokensReachedException:
+        # Tool results are already saved; only the reply text was cut off.
+        text = "Sorry, my answer got too long. Please check the claim details below or ask again."
     claim = ctx.load()
-    reply = {"reply": clean_reply(str(result)), "claim": summary(claim, ctx.now)}
+    reply = {"reply": text, "claim": summary(claim, ctx.now)}
     if claim["packet_key"]:
         reply["packet_url"] = blobs.url(claim["packet_key"])
     return reply

@@ -1,6 +1,7 @@
 """Runtime settings, read from environment variables."""
 
 import os
+from pathlib import Path
 from datetime import timedelta, timezone
 
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -11,7 +12,8 @@ VISION_MODEL_ID = os.getenv("POL_VISION_MODEL_ID", MODEL_ID)
 
 # "local" keeps everything under DATA_DIR; "aws" uses S3 + DynamoDB.
 BACKEND = os.getenv("POL_BACKEND", "local")
-DATA_DIR = os.getenv("POL_DATA_DIR", ".data")
+# Outside agent/ so local data never ends up in the AgentCore code zip.
+DATA_DIR = os.getenv("POL_DATA_DIR", str(Path(__file__).resolve().parents[2] / ".data"))
 BUCKET = os.getenv("POL_BUCKET", "")
 TABLE = os.getenv("POL_TABLE", "")
 

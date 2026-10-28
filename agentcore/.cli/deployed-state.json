@@ -1,0 +1,10 @@
+{
+  "targets": {
+    "default": {
+      "stackArn": "arn:aws:cloudformation:us-east-1:905543840246:stack/AgentCore-proofofloss-default/0285f530-d2f5-11f1-8997-0affe9865b5d",
+      "resources": {
+        "credentials": {}
+      }
+    }
+  }
+}
