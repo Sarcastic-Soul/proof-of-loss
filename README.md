@@ -87,7 +87,8 @@ browser -> CloudFront -> S3 (web app)
                     \-> /api/* -> Lambda function URL -> AgentCore Runtime (Strands agent)
                                          |                       |-> Bedrock (Nova Pro)
                                          |                       |-> Open-Meteo
-                                         \-> S3 (photos, packets, sessions) + DynamoDB (claims)
+                                         |-> Amazon Transcribe (voice notes)
+                                         \-> S3 (photos, voice, packets, sessions) + DynamoDB (claims)
 ```
 
 Photos go straight from the browser to S3 with a presigned POST (10 MB cap), so large
@@ -104,10 +105,27 @@ curl -X POST "$WEB_URL/api/chat" -H 'content-type: application/json' \
 
 ## Status
 
-Work in progress for the AWS "Strands SDK: Workshop to Ship" hackathon. Deployed: agent
-runtime, API, storage, and the web app (English, Hindi and Hinglish; phone and desktop
-layouts; voice typing through the browser's speech recognition). Still to come: deadline
-reminders, evals.
+Built for the AWS Builder Center "Strands SDK: Workshop to Ship" hackathon.
+
+- Live app: https://d39zeolevac0dg.cloudfront.net (English, Hindi and Hinglish; phone and desktop layouts)
+- Voice input: the browser records a short clip, Amazon Transcribe turns it into text (hi-IN / en-IN)
+- Deadline reminder: a calendar file with alerts 12 hours and 3 hours before the 72-hour deadline
+- Demo video: VIDEO_LINK
+- Write-up: [docs/article.md](docs/article.md)
+
+## Evals
+
+`agent/evals/run_evals.py` runs 14 scripted claims against the real model, with fake
+weather and photo results so the right outcome is known. It checks that the packet is made
+or blocked when it should be (old photo, no photo, dry weather, prompt injection), that
+crop, cause, area and date are saved correctly, that the reply is in the farmer's language,
+and that there are no money promises or internal words. Latest run: [agent/evals/RESULTS.md](agent/evals/RESULTS.md).
+
+```bash
+cd agent
+uv run python evals/run_evals.py            # all cases (about 2.5 minutes, a few cents)
+uv run python evals/run_evals.py hail       # only cases whose name contains "hail"
+```
 
 ## License
 

@@ -9,7 +9,8 @@ from datetime import datetime, timedelta
 from .evidence import loss_start
 
 FARMER_FIELDS = ["name", "village", "district", "state"]
-LOSS_FIELDS = ["crop", "peril", "area_acres", "loss_date", "time_of_day"]
+# time_of_day is optional: "unknown" starts the 72 hours at midnight, the safe side.
+LOSS_FIELDS = ["crop", "peril", "area_acres", "loss_date"]
 
 
 def missing_details(claim: dict) -> list[str]:
@@ -30,7 +31,7 @@ def photo_problems(claim: dict) -> list[str]:
         problems.append("no photo has a location (ask for a photo taken in the app with location on)")
     loss = claim["loss"]
     if loss.get("loss_date"):
-        start = loss_start(loss["loss_date"], loss.get("time_of_day", "unknown"))
+        start = loss_start(loss["loss_date"], loss.get("time_of_day") or "unknown")
         fresh = [p for p in checked if p.get("taken_at")
                  and datetime.fromisoformat(p["taken_at"]) >= start - timedelta(hours=12)]
         if not fresh:

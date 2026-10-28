@@ -77,6 +77,7 @@ function renderStatic() {
   for (const b of document.querySelectorAll("[data-lang]")) b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
   $("text").placeholder = t("placeholder");
   $("mic-label").textContent = listening ? t("stop") : t("speak");
+  $("mic-icon").className = listening ? "ph-fill ph-stop" : "ph ph-microphone";
 }
 
 function renderSign() {
@@ -86,7 +87,7 @@ function renderSign() {
   sign.classList.remove("urgent", "late");
   const cropText = loss.crop && `${crop(loss.crop)}${loss.area_acres ? ` ${loss.area_acres} ${t("acre")}` : ""}`;
   $("sign-label").textContent = [peril(loss.peril), cropText, s && s.farmer && s.farmer.district]
-    .filter(Boolean).join(" · ") || t("tagline");
+    .filter(Boolean).join(" · ") || t("signFresh");
 
   if (!s || !s.deadline) {
     $("hours").textContent = "72";
@@ -123,7 +124,8 @@ function stepRows() {
         .filter(Boolean).join(", ") || t("lossTodo")],
     [photoOk ? "done" : photos ? "bad" : "todo", titles[2],
       !photos ? t("photoNone") : photoOk ? t("photoOk")(photos) : t("photoBad")(photos)],
-    w ? [w.verdict === "contradicted" ? "bad" : "done", titles[3], `${t("verdict")[w.verdict] || w.verdict}: ${w.reason}`]
+    w ? [w.verdict === "contradicted" ? "bad" : "done", titles[3], // The weather reason is English (it goes into the official packet), so only show it in English.
+      lang === "en" ? `${t("verdict")[w.verdict] || w.verdict}: ${w.reason}` : t("verdict")[w.verdict] || w.verdict]
       : ["todo", titles[3], t("weatherTodo")],
     [s.packet_key ? "done" : "todo", titles[4], s.packet_key ? t("packetDone") : t("packetTodo")],
     ["todo", titles[5], t("submit")],
@@ -151,11 +153,33 @@ function renderLog() {
     return node;
   });
   if (pending) {
-    const wait = el("p", "msg wait");
-    wait.append(el("i", "ph ph-circle-notch"), el("span", "", t(pending)));
+    const rec = pending === "listening";
+    const wait = el("p", rec ? "msg wait rec" : "msg wait");
+    wait.append(el("i", rec ? "ph-fill ph-record" : "ph ph-circle-notch"), el("span", "", t(pending)));
     nodes.push(wait);
   }
   $("log").replaceChildren(...nodes);
+}
+
+// Calendar file with two alerts, so the phone reminds the farmer even with no
+// network and without us storing a phone number.
+function reminderLink() {
+  const s = state.summary;
+  if (!s || !s.deadline || new Date(s.deadline.report_by) <= Date.now()) return null;
+  const stamp = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const end = new Date(s.deadline.report_by);
+  const start = new Date(Math.max(Date.now(), end - 3600000));
+  const esc = (x) => x.replace(/[,;\\]/g, (c) => `\\${c}`);
+  const ics = [
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Proof of Loss//EN", "BEGIN:VEVENT",
+    `UID:${state.claimId}@proof-of-loss`, `DTSTAMP:${stamp(new Date())}`,
+    `DTSTART:${stamp(start)}`, `DTEND:${stamp(end)}`,
+    `SUMMARY:${esc(t("remindTitle"))}`, `DESCRIPTION:${esc(t("remindBody"))}`,
+    "BEGIN:VALARM", "ACTION:DISPLAY", "TRIGGER:-PT12H", `DESCRIPTION:${esc(t("remindTitle"))}`, "END:VALARM",
+    "BEGIN:VALARM", "ACTION:DISPLAY", "TRIGGER:-PT3H", `DESCRIPTION:${esc(t("remindTitle"))}`, "END:VALARM",
+    "END:VEVENT", "END:VCALENDAR",
+  ].join("\r\n");
+  return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
 }
 
 function render() {
@@ -165,6 +189,9 @@ function render() {
   renderLog();
   const s = state.summary;
   $("file-anyway").hidden = !(s && s.can_file_anyway) || busy;
+  const remind = reminderLink();
+  $("remind").hidden = !remind;
+  if (remind) $("remind").href = remind;
   $("packet").hidden = !state.packetUrl;
   if (state.packetUrl) $("packet").href = state.packetUrl;
   document.body.classList.toggle("busy", busy);
@@ -248,35 +275,80 @@ async function refreshPacketLink() {
   } catch { /* keep the old link */ }
 }
 
-// ---------- voice (browser speech recognition) ----------
+// ---------- voice (recorded in the browser, turned into text by Amazon Transcribe) ----------
+// Browser speech recognition is missing in Brave and Firefox and needs Google's servers
+// in Chrome, so the app records a short clip and transcribes it on AWS instead.
 
-const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+const MAX_VOICE_SECONDS = 60;
+const VOICE_TYPES = ["audio/webm;codecs=opus", "audio/ogg;codecs=opus", "audio/mp4", "audio/webm"];
 let listening = null;
 
-function toggleMic() {
-  if (!Speech) {
+function voiceType() {
+  if (!window.MediaRecorder || !navigator.mediaDevices) return null;
+  return VOICE_TYPES.find((type) => MediaRecorder.isTypeSupported(type)) || null;
+}
+
+async function toggleMic() {
+  if (listening) return listening.stop();
+  const type = voiceType();
+  if (!type) {
     state.messages.push({ who: "err", text: t("noSpeech") });
     return render();
   }
-  if (listening) return listening.stop();
-  const rec = new Speech();
-  rec.lang = t("speech");
-  rec.interimResults = true;
-  const box = $("text");
-  const before = box.value ? `${box.value} ` : "";
-  openComposer();
-  rec.onresult = (e) => { box.value = before + Array.from(e.results, (r) => r[0].transcript).join(" "); };
-  rec.onend = () => {
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch {
+    state.messages.push({ who: "err", text: t("micBlocked") });
+    return render();
+  }
+  const chunks = [];
+  const rec = new MediaRecorder(stream, { mimeType: type });
+  rec.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
+  rec.onstop = () => {
+    stream.getTracks().forEach((track) => track.stop());
+    clearTimeout(rec.limit);
     listening = null;
-    $("mic").setAttribute("aria-pressed", "false");
-    renderStatic();
-    box.focus();
+    pending = null;
+    transcribe(new Blob(chunks, { type }));
   };
-  rec.onerror = rec.onend;
+  rec.limit = setTimeout(() => rec.state === "recording" && rec.stop(), MAX_VOICE_SECONDS * 1000);
   listening = rec;
+  pending = "listening";
   $("mic").setAttribute("aria-pressed", "true");
-  renderStatic();
   rec.start();
+  render();
+  scrollToEnd();
+}
+
+async function transcribe(blob) {
+  $("mic").setAttribute("aria-pressed", "false");
+  if (blob.size < 2000) return render(); // tapped Stop right away
+  busy = true;
+  pending = "transcribing";
+  render();
+  scrollToEnd();
+  try {
+    const claimId = await ensureClaim();
+    const contentType = blob.type.split(";")[0];
+    const up = await api("/voice-url", { claim_id: claimId, content_type: contentType });
+    const form = new FormData();
+    for (const [k, v] of Object.entries(up.fields)) form.append(k, v);
+    form.append("file", blob);
+    const res = await fetch(up.url, { method: "POST", body: form });
+    if (!res.ok) throw new Error(`upload ${res.status}`);
+    const { text } = await api("/transcribe", { claim_id: claimId, key: up.key, lang });
+    if (!text) throw new Error(t("heardNothing"));
+    const box = $("text");
+    box.value = box.value ? `${box.value} ${text}` : text;
+  } catch (err) {
+    state.messages.push({ who: "err", text: t("voiceFail")(err.message) });
+  } finally {
+    busy = false;
+    pending = null;
+    render();
+    if ($("text").value) openComposer();
+  }
 }
 
 function openComposer() {

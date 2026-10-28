@@ -5,6 +5,8 @@ Routes (the /api prefix is optional):
     POST /api/upload-url   {"claim_id"} -> presigned S3 POST for one photo
     POST /api/chat         {"claim_id", "message", "photos", "file_anyway", "lang"} -> agent reply
     POST /api/packet       {"claim_id"} -> fresh link to the claim packet
+    POST /api/voice-url    {"claim_id", "content_type"} -> presigned S3 POST for a voice note
+    POST /api/transcribe   {"claim_id", "key", "lang"} -> {"text"} via Amazon Transcribe
 
 The agent runs on AgentCore Runtime; the claim id doubles as the runtime session id,
 so every turn of one claim lands in the same session.
@@ -14,6 +16,7 @@ import base64
 import json
 import os
 import re
+import time
 import uuid
 
 import boto3
@@ -26,9 +29,14 @@ BUCKET = os.environ["BUCKET"]
 MAX_MESSAGE_CHARS = 2000
 MAX_PHOTOS_PER_TURN = 5
 MAX_PHOTO_BYTES = 10 * 1024 * 1024
+MAX_VOICE_BYTES = 5 * 1024 * 1024
+# Browser recorders: Chrome/Firefox give webm or ogg, Safari gives mp4.
+VOICE_FORMATS = {"audio/webm": "webm", "audio/ogg": "ogg", "audio/mp4": "mp4"}
+TRANSCRIBE_WAIT_SECONDS = 45  # CloudFront gives up on the origin after 60 s
 CLAIM_ID = re.compile(r"^claim-[0-9a-f]{32}$")
 
 s3 = boto3.client("s3", region_name=REGION)
+transcribe = boto3.client("transcribe", region_name=REGION)
 agentcore = boto3.client("bedrock-agentcore", region_name=REGION,
                          config=Config(read_timeout=120, retries={"max_attempts": 1}))
 
@@ -112,6 +120,49 @@ def chat(body: dict) -> dict:
     return out
 
 
+def voice_url(body: dict) -> dict:
+    claim_id = claim_id_from(body)
+    content_type = str(body.get("content_type", "")).split(";")[0]
+    if content_type not in VOICE_FORMATS:
+        raise BadRequest(f"content_type must be one of {sorted(VOICE_FORMATS)}")
+    key = f"voice/{claim_id}/{uuid.uuid4().hex}.{VOICE_FORMATS[content_type]}"
+    post = s3.generate_presigned_post(
+        BUCKET, key,
+        Fields={"Content-Type": content_type},
+        Conditions=[{"Content-Type": content_type},
+                    ["content-length-range", 1, MAX_VOICE_BYTES]],
+        ExpiresIn=900)
+    return {"key": key, "url": post["url"], "fields": post["fields"]}
+
+
+def transcribe_voice(body: dict) -> dict:
+    """Batch Transcribe on a short voice note. Indian farmers mostly speak Hindi
+    or Hinglish, which hi-IN handles; en-IN when the app is set to English."""
+    claim_id = claim_id_from(body)
+    key = str(body.get("key", ""))
+    if not key.startswith(f"voice/{claim_id}/"):
+        raise BadRequest("voice key does not belong to this claim")
+    job = f"pol-{uuid.uuid4().hex}"
+    transcribe.start_transcription_job(
+        TranscriptionJobName=job,
+        LanguageCode="en-IN" if body.get("lang") == "en" else "hi-IN",
+        MediaFormat=key.rsplit(".", 1)[1],
+        Media={"MediaFileUri": f"s3://{BUCKET}/{key}"},
+        OutputBucketName=BUCKET, OutputKey=f"transcripts/{job}.json")
+    deadline = time.time() + TRANSCRIBE_WAIT_SECONDS
+    while time.time() < deadline:
+        status = transcribe.get_transcription_job(TranscriptionJobName=job)["TranscriptionJob"]
+        state = status["TranscriptionJobStatus"]
+        if state == "COMPLETED":
+            result = json.loads(s3.get_object(Bucket=BUCKET, Key=f"transcripts/{job}.json")["Body"].read())
+            transcribe.delete_transcription_job(TranscriptionJobName=job)
+            return {"text": " ".join(t["transcript"] for t in result["results"]["transcripts"]).strip()}
+        if state == "FAILED":
+            raise BadRequest(f"could not understand the recording ({status.get('FailureReason', 'unknown')})")
+        time.sleep(1)
+    raise BadRequest("transcription took too long; please type instead")
+
+
 def packet(body: dict) -> dict:
     key = f"packets/{claim_id_from(body)}.html"
     return {"url": s3.generate_presigned_url(
@@ -119,7 +170,8 @@ def packet(body: dict) -> dict:
 
 
 ROUTES = {("POST", "/claims"): new_claim, ("POST", "/upload-url"): upload_url,
-          ("POST", "/chat"): chat, ("POST", "/packet"): packet}
+          ("POST", "/chat"): chat, ("POST", "/packet"): packet,
+          ("POST", "/voice-url"): voice_url, ("POST", "/transcribe"): transcribe_voice}
 
 
 def handler(event, _context):

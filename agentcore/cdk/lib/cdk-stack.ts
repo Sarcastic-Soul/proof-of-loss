@@ -4,6 +4,7 @@ import * as budgets from 'aws-cdk-lib/aws-budgets';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -72,6 +73,15 @@ export class AgentCoreStack extends Stack {
     runtime.grantInvoke(api);
     data.grantPut(api, 'photos/*');
     data.grantRead(api, 'packets/*');
+    // Voice notes: the browser uploads to voice/, Transcribe reads them with the
+    // function's own permissions and writes the text to transcripts/.
+    data.grantReadWrite(api, 'voice/*');
+    data.grantReadWrite(api, 'transcripts/*');
+    api.addToRolePolicy(new iam.PolicyStatement({
+      actions: ['transcribe:StartTranscriptionJob', 'transcribe:GetTranscriptionJob',
+        'transcribe:DeleteTranscriptionJob'],
+      resources: ['*'],
+    }));
     const apiUrl = api.addFunctionUrl({ authType: lambda.FunctionUrlAuthType.NONE });
 
     // Web app on a private bucket; CloudFront serves it and routes /api/* to the function,

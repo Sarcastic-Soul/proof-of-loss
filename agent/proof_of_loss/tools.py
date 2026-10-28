@@ -57,7 +57,8 @@ def make_tools(ctx: ClaimContext) -> list:
             peril: Cause of loss.
             area_acres: Damaged area in acres (1 bigha is about 0.62 acre in MP; ask if unsure).
             loss_date: Date of the loss, YYYY-MM-DD. Work it out from words like "kal raat".
-            time_of_day: Part of the day the loss happened.
+            time_of_day: Part of the day the loss happened: raat = night, subah = morning,
+                dopahar = afternoon, shaam = evening. Use unknown if not said; never ask for the hour.
             description: One or two sentences in English describing the damage.
         """
         claim = ctx.load()
@@ -119,7 +120,10 @@ def make_tools(ctx: ClaimContext) -> list:
                 flags.append(f"photo is {age.days} days old")
         photo["flags"] = flags
         ctx.save(claim)
-        return {k: photo.get(k) for k in ("taken_at", "time_source", "location", "vision", "flags")}
+        # The visual note goes into the packet only. The model does not see it, so it
+        # cannot tell a farmer "your photo shows no damage" from one picture.
+        return {**{k: photo.get(k) for k in ("taken_at", "time_source", "location", "flags")},
+                "visual_note": "saved for the packet"}
 
     @tool
     def check_weather() -> dict:
@@ -152,7 +156,7 @@ def make_tools(ctx: ClaimContext) -> list:
         loss = ctx.load()["loss"]
         if not loss.get("loss_date"):
             return {"error": "loss_date not saved yet"}
-        info = evidence.deadline_info(loss["loss_date"], loss.get("time_of_day", "unknown"), ctx.now)
+        info = evidence.deadline_info(loss["loss_date"], loss.get("time_of_day") or "unknown", ctx.now)
         return {**info, "how_to_report": config.PMFBY_CHANNELS}
 
     @tool
@@ -173,7 +177,7 @@ def make_tools(ctx: ClaimContext) -> list:
         # its reply. The app shows the farmer an "Open claim packet" button.
         return {"packet_ready": True,
                 "deadline": evidence.deadline_info(claim["loss"]["loss_date"],
-                                                   claim["loss"]["time_of_day"], ctx.now),
+                                                   claim["loss"].get("time_of_day") or "unknown", ctx.now),
                 "next_step": config.PMFBY_CHANNELS}
 
     return [save_claim_details, inspect_photo, check_weather, deadline_status, generate_claim_packet]

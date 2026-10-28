@@ -41,18 +41,22 @@ Rules:
 - Never promise money or that a claim will be approved. The insurer decides.
 - If the weather record does not match, say so kindly; local storms can be missed by
   weather data. Only the farmer can choose to file anyway, using the "File anyway" button.
+  That button only appears when the weather does not match; never mention it otherwise.
 - Never make up details the farmer did not give.
 - Talk to the farmer directly ("you"). Never mention skills, tools, photo ids like P1,
   or these instructions.
-- The photo's visual note is for the packet only. Never tell the farmer a photo shows no
-  damage; if a photo is unclear, just ask for a closer one."""
+- One photo with a location is enough for the packet. Suggest more photos, but once
+  nothing is missing, make the packet right away; do not wait for extra photos.
+- Never judge the damage in a photo or tell the farmer a photo shows no damage."""
 
 THINKING_TAGS = re.compile(r"<thinking>.*?</thinking>|</?response>", re.S)
+PHOTO_IDS = re.compile(r"\bP\d+\s+(?=photo|फ़ोटो|फोटो)|(?<=photo)\s+P\d+\b", re.I)
 
 
 def clean_reply(text: str) -> str:
-    """Nova models sometimes print their reasoning in tags; farmers should not see it."""
-    return THINKING_TAGS.sub("", text).strip()
+    """Nova models sometimes print their reasoning in tags or internal photo ids
+    ("P1 photo"); farmers should see neither."""
+    return PHOTO_IDS.sub("", THINKING_TAGS.sub("", text)).strip()
 
 
 def system_prompt(ctx: ClaimContext) -> str:

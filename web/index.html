@@ -38,15 +38,18 @@
       </div>
       <p id="sign-note"></p>
     </section>
-    <ol class="steps" id="steps"></ol>
     <div class="actions">
-      <button class="anyway" id="file-anyway" type="button" hidden>
-        <i class="ph-bold ph-warning"></i><span data-t="anyway"></span>
-      </button>
       <a class="packet" id="packet" hidden target="_blank" rel="noopener">
         <i class="ph-bold ph-file-text"></i><span data-t="packet"></span>
       </a>
+      <button class="anyway" id="file-anyway" type="button" hidden>
+        <i class="ph-bold ph-warning"></i><span data-t="anyway"></span>
+      </button>
+      <a class="remind" id="remind" hidden download="pmfby-deadline.ics">
+        <i class="ph-bold ph-bell-ringing"></i><span data-t="remind"></span>
+      </a>
     </div>
+    <ol class="steps" id="steps"></ol>
   </aside>
 
   <main class="chat" aria-labelledby="chat-h">
@@ -55,7 +58,7 @@
 
     <form class="composer" id="composer">
       <label class="sr" for="text" data-t="placeholder"></label>
-      <textarea id="text" rows="1" maxlength="2000"></textarea>
+      <textarea id="text" rows="2" maxlength="2000" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false"></textarea>
       <button class="send" type="submit"><i class="ph-bold ph-paper-plane-right"></i><span class="sr" data-t="send"></span></button>
     </form>
 
@@ -64,7 +67,7 @@
         <i class="ph ph-camera"></i><span data-t="photo"></span>
         <input id="photo-input" type="file" accept="image/jpeg" class="sr">
       </label>
-      <button class="bar-btn" id="mic" type="button" aria-pressed="false"><i class="ph ph-microphone"></i><span id="mic-label"></span></button>
+      <button class="bar-btn" id="mic" type="button" aria-pressed="false"><i class="ph ph-microphone" id="mic-icon"></i><span id="mic-label"></span></button>
       <button class="bar-btn type-btn" id="type" type="button"><i class="ph ph-keyboard"></i><span data-t="type"></span></button>
     </nav>
   </main>

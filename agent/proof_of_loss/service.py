@@ -64,7 +64,7 @@ def script_hint(message: str, lang: str | None = None) -> str | None:
 
 def summary(claim: dict, now: datetime) -> dict:
     loss = claim["loss"]
-    deadline = (evidence.deadline_info(loss["loss_date"], loss.get("time_of_day", "unknown"), now)
+    deadline = (evidence.deadline_info(loss["loss_date"], loss.get("time_of_day") or "unknown", now)
                 if loss.get("loss_date") else None)
     return {
         "claim_id": claim["claim_id"],

@@ -37,7 +37,7 @@ def _rows(pairs) -> str:
 
 def render(claim: dict, blobs: BlobStore, now: datetime) -> str:
     f, loss, w = claim["farmer"], claim["loss"], claim["weather"]
-    dl = evidence.deadline_info(loss["loss_date"], loss["time_of_day"], now)
+    dl = evidence.deadline_info(loss["loss_date"], loss.get("time_of_day") or "unknown", now)
 
     photo_cards = []
     for pid, p in claim["photos"].items():
@@ -82,7 +82,7 @@ under PMFBY localized calamity rules (report within {config.REPORT_WINDOW_HOURS}
 <h2>Loss <span class="hi">/ नुकसान</span></h2>
 <table>{_rows([("Crop", _e(loss.get('crop'))), ("Cause", _e(loss.get('peril'))),
                ("Area affected", f"{_e(loss.get('area_acres'))} acres"),
-               ("Date of loss", f"{_e(loss.get('loss_date'))} ({_e(loss.get('time_of_day'))})"),
+               ("Date of loss", f"{_e(loss.get('loss_date'))} ({_e(loss.get('time_of_day') or 'time not given')})"),
                ("Description", _e(loss.get('description'))),
                ("Report by", f"{_e(dl['report_by'])} ({dl['hours_left']} hours left at preparation)")])}</table>
 

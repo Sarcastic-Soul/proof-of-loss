@@ -146,6 +146,6 @@ def deadline_info(loss_date: str, time_of_day: str, now: datetime) -> dict:
     return {
         "loss_assumed_from": start.isoformat(timespec="minutes"),
         "report_by": deadline.isoformat(timespec="minutes"),
-        "hours_left": round(hours_left, 1),
+        "hours_left": math.floor(hours_left),  # whole hours, same as the app shows
         "status": "late" if hours_left < 0 else "urgent" if hours_left < 24 else "ok",
     }

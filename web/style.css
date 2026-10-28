@@ -29,7 +29,7 @@ button, textarea, input { font: inherit; color: inherit; }
 /* Signboard */
 .sign { background: var(--ink); color: var(--bg); padding: 16px 16px 22px; }
 .sign small { font: 600 14px Hind; letter-spacing: .08em; text-transform: uppercase; color: var(--yellow); }
-.count { display: flex; align-items: flex-end; gap: 12px; margin-top: 6px; }
+.count { display: flex; align-items: flex-end; gap: 12px; margin-top: 16px; }
 .num { font: 800 clamp(96px, 30vw, 132px)/0.8 "Anek Devanagari", sans-serif; color: var(--yellow);
   font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
 .unit { font: 800 26px/1.05 "Anek Devanagari", sans-serif; padding-bottom: 6px; }
@@ -41,6 +41,7 @@ button, textarea, input { font: inherit; color: inherit; }
 .steps { list-style: none; padding: 0 16px; }
 .steps li { display: grid; grid-template-columns: 36px 1fr; gap: 12px; padding: 14px 0;
   border-bottom: 1px solid var(--line); align-items: start; }
+.steps li:last-child { border-bottom: 0; }
 .steps i { font-size: 30px; line-height: 1; margin-top: 2px; }
 .steps .done i { color: var(--green); }
 .steps .todo i { color: var(--muted); }
@@ -49,12 +50,13 @@ button, textarea, input { font: inherit; color: inherit; }
 .steps span { color: var(--muted); font-size: 16px; overflow-wrap: anywhere; }
 
 /* Actions */
-.actions { padding: 12px 16px; display: grid; gap: 12px; }
+.actions { padding: 16px 16px 4px; display: grid; gap: 10px; }
 .actions:not(:has(:not([hidden]))) { display: none; }
-.packet, .anyway { display: flex; gap: 10px; align-items: center; justify-content: center; min-height: 60px; padding: 0 12px;
+.packet, .anyway, .remind { display: flex; gap: 10px; align-items: center; justify-content: center; min-height: 60px; padding: 0 12px;
   border: 3px solid var(--ink); font: 700 21px "Anek Devanagari", sans-serif; text-decoration: none; cursor: pointer; color: var(--ink); }
 .packet { background: var(--yellow); }
-.anyway { background: var(--paper); }
+.anyway, .remind { background: var(--paper); }
+.remind { font-size: 18px; min-height: 52px; border-width: 2px; }
 
 /* Conversation */
 .chat { padding-bottom: calc(var(--bar-h) + 24px + env(safe-area-inset-bottom)); }
@@ -67,6 +69,10 @@ button, textarea, input { font: inherit; color: inherit; }
 .msg.err { color: var(--red); font-size: 16px; }
 .msg.wait { color: var(--muted); display: flex; gap: 10px; align-items: center; font-size: 16px; }
 .msg.wait i { font-size: 22px; animation: spin 1.2s linear infinite; }
+.msg.wait.rec { color: var(--ink); font-weight: 600; }
+.msg.wait.rec i { color: var(--red); animation: blink 1s steps(2, start) infinite; }
+@keyframes blink { to { visibility: hidden; } }
+#mic[aria-pressed="true"] i { color: var(--red); }
 .msg img { display: block; max-width: 180px; margin-top: 8px; border: 2px solid var(--ink); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -74,9 +80,14 @@ button, textarea, input { font: inherit; color: inherit; }
 .composer { display: none; gap: 8px; padding: 10px 16px; background: var(--bg); border-top: 2px solid var(--ink);
   position: fixed; left: 0; right: 0; bottom: calc(var(--bar-h) + env(safe-area-inset-bottom)); }
 .typing .composer { display: flex; }
-.composer textarea { flex: 1; min-height: 52px; max-height: 160px; resize: none; padding: 12px;
-  border: 2px solid var(--ink); background: var(--paper); border-radius: 0; }
-.send { width: 56px; min-height: 52px; border: 0; background: var(--ink); color: var(--yellow); font-size: 24px; cursor: pointer; }
+.composer { align-items: stretch; }
+.composer textarea { flex: 1; min-height: 56px; max-height: 160px; resize: none; padding: 12px 14px;
+  border: 2px solid var(--ink); background: var(--paper); border-radius: 0; line-height: 1.4; }
+.composer textarea:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--ink); }
+.composer textarea::placeholder { color: #77725f; }
+.send { flex: none; width: 60px; display: grid; place-items: center; padding: 0; border: 0; background: var(--ink);
+  color: var(--yellow); font-size: 26px; line-height: 1; cursor: pointer; }
+.send:hover { background: #2e2c25; }
 
 /* Bottom bar on phones */
 .bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--ink); padding-bottom: env(safe-area-inset-bottom);
@@ -100,7 +111,8 @@ button, textarea, input { font: inherit; color: inherit; }
   .status .steps b { font-size: 19px; }
   .status .steps span { font-size: 15px; }
   .status .steps { padding: 0 20px; }
-  .status .actions { padding: 16px 20px 20px; }
+  .status .actions { padding: 20px 20px 4px; }
+  .status .steps { padding-bottom: 6px; }
   .sign { padding: 20px 20px 26px; }
   .num { font-size: 112px; }
   .chat { display: flex; flex-direction: column; min-height: calc(100vh - var(--top-h) - 24px); padding-bottom: 0; }
@@ -117,4 +129,12 @@ button, textarea, input { font: inherit; color: inherit; }
   .type-btn { display: none; }
 }
 
-@media (prefers-reduced-motion: reduce) { .msg.wait i { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .msg.wait i, .msg.wait.rec i { animation: none; } }
+
+@media (hover: hover) {
+  .langs button:not([aria-pressed="true"]):hover, .new:hover, .anyway:hover, .remind:hover { background: #e7e3d5; }
+  .packet:hover { background: #ffd21a; }
+}
+@media (hover: hover) and (min-width: 900px) {
+  .bar-btn:not([aria-pressed="true"]):hover { background: #e7e3d5; }
+}
