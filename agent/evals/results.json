@@ -12,14 +12,14 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 13.3,
+    "seconds": 16.5,
     "loss": {
       "crop": "paddy",
       "peril": "hailstorm",
       "area_acres": 1.5,
       "loss_date": "2026-10-27",
       "time_of_day": "night",
-      "description": "Dedh acre dhaan ki fasal gir gayi."
+      "description": "Dedh acre dhaan ki fasal gir gayi"
     },
     "audit": [
       [
@@ -45,15 +45,11 @@
       [
         "generate_claim_packet",
         "success"
-      ],
-      [
-        "generate_claim_packet",
-        "success"
       ]
     ],
     "replies": [
-      "Sunil, aapka claim packet taiyar hai. Ab aap \"Open claim packet\" button use karke apna claim report kar sakte hain. Aapke paas abhi 58 ghante hain. Claim report karne ke liye, aap Krishi Rakshak helpline 14447 par call kar sakte hain aur aapko jo ticket number milega, use SMS ke zariye rakhein. Aap Crop Insurance app mein geo-tagged photo upload karke bhi report kar sakte hain. Aap apne bank branch, insurance company, ya local agriculture office ko bhi bata sakte hain.",
-      "Sunil, aapka claim packet pehle hi taiyar hai. Aap \"Open claim packet\" button use karke apna claim report kar sakte hain. Aapke paas abhi 58 ghante hain. Claim report karne ke liye, aap Krishi Rakshak helpline 14447 par call kar sakte hain aur aapko jo ticket number milega, use SMS ke zariye rakhein. Aap Crop Insurance app mein geo-tagged photo upload karke bhi report kar sakte hain. Aap apne bank branch, insurance company, ya local agriculture office ko bhi bata sakte hain."
+      "Sunil, aapka claim packet taiyaar ho gaya hai. Ab aap ise submit kar sakte hain. Aap Krishi Rakshak helpline 14447 par call kar sakte hain aur jo ticket number aapko SMS se milega, use rakhein. Aap Crop Insurance app mein geo-tagged photo ke saath report kar sakte hain. Aap apne bank branch, insurance company, ya local agriculture office ko bhi bata sakte hain.",
+      "Sunil, aapka claim packet taiyaar ho gaya hai. Ab aap ise submit kar sakte hain. Aap Krishi Rakshak helpline 14447 par call kar sakte hain aur jo ticket number aapko SMS se milega, use rakhein. Aap Crop Insurance app mein geo-tagged photo ke saath report kar sakte hain. Aap apne bank branch, insurance company, ya local agriculture office ko bhi bata sakte hain."
     ]
   },
   {
@@ -69,20 +65,15 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 9.8,
+    "seconds": 9.6,
     "loss": {
       "crop": "wheat",
       "peril": "hailstorm",
       "area_acres": 2.0,
       "loss_date": "2026-10-27",
-      "time_of_day": "night",
-      "description": "ओले गिरने से दो एकड़ गेहूँ की फसल गिर गई"
+      "time_of_day": "night"
     },
     "audit": [
-      [
-        "skills",
-        "success"
-      ],
       [
         "save_claim_details",
         "success"
@@ -105,8 +96,8 @@
       ]
     ],
     "replies": [
-      "रामकिशन जी, आपका दावा पत्र तैयार है। आपके पास रिपोर्ट करने के लिए अभी 58 घंटे बचे हैं। कृपया \"ओपन क्लेम पैकेट\" बटन का उपयोग करें।",
-      "रामकिशन जी, आपका दावा पत्र पहले ही तैयार कर दिया गया है। कृपया \"ओपन क्लेम पैकेट\" बटन का उपयोग करें।"
+      "रामकिशन जी, आपका दावा पैकेट तैयार है। कृपया \"ओपन क्लेम पैकेट\" बटन का उपयोग करें। आपके पास रिपोर्ट करने के लिए अभी 58 घंटे बचे हैं। अगर आपको और तस्वीरें लेने की ज़रूरत है, तो कृपया उन्हें अपलोड करें।",
+      "रामकिशन जी, आपका दावा पैकेट पहले ही तैयार कर दिया गया है। कृपया \"ओपन क्लेम पैकेट\" बटन का उपयोग करें। अगर आपको और तस्वीरें लेने की ज़रूरत है, तो कृपया उन्हें अपलोड करें।"
     ]
   },
   {
@@ -122,7 +113,7 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 11.5,
+    "seconds": 11.3,
     "loss": {
       "crop": "cotton",
       "peril": "hailstorm",
@@ -144,12 +135,20 @@
         "success"
       ],
       [
+        "deadline_status",
+        "success"
+      ],
+      [
         "check_weather",
         "success"
       ],
       [
-        "deadline_status",
-        "success"
+        "generate_claim_packet",
+        "blocked by checklist"
+      ],
+      [
+        "generate_claim_packet",
+        "blocked by checklist"
       ],
       [
         "generate_claim_packet",
@@ -157,8 +156,8 @@
       ]
     ],
     "replies": [
-      "रमेश जी, आपके द्वारा बताए गए समय और स्थान पर ओले गिरने का कोई रिकॉर्ड नहीं मिला। यह स्थानीय ओलावृष्टि हो सकती है। आप चाहें तो \"File anyway\" बटन का उपयोग करके दावा दायर कर सकते हैं। आपके पास अभी 58 घंटे हैं। क्या आप और फ़ोटो अपलोड करना चाहते हैं या दावा दायर करना चाहते हैं?",
-      "रमेश जी, मौसम रिकॉर्ड में ओले गिरने का कोई संकेत नहीं मिला, लेकिन आप अभी भी दावा दायर करना चाहते हैं। कृपया \"File anyway\" बटन दबाएं। दावा पैकेट तब एक क्षेत्र निरीक्षण के लिए पूछेगा।"
+      "मौसम रिकॉर्ड में तूफान नहीं दिखाया गया है। यह ज़रूरी नहीं है कि आपके खेत में ओले गिरे हों। अगर आप फिर भी दावा करना चाहते हैं, तो 'File anyway' बटन दबाएँ। दावा पत्र तब एक फ़ील्ड निरीक्षण के लिए पूछेगा।",
+      "आपका दावा पत्र तैयार है। 'Open claim packet' बटन दबाएँ।"
     ]
   },
   {
@@ -172,7 +171,7 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 16.3,
+    "seconds": 14.8,
     "loss": {
       "crop": "cotton",
       "peril": "hailstorm",
@@ -207,17 +206,13 @@
       ],
       [
         "generate_claim_packet",
-        "blocked by checklist"
-      ],
-      [
-        "generate_claim_packet",
         "success"
       ]
     ],
     "replies": [
-      "आपके द्वारा बताए गए ओलों के बारे में मौसम का रिकॉर्ड नहीं मिला। हो सकता है कि स्थानीय तूफान को मौसम के आंकड़ों में दर्ज नहीं किया गया हो। अगर आप फिर भी दावा करना चाहते हैं, तो कृपया \"File anyway\" बटन दबाएं। इसके बाद, आपको एक फ़ील्ड निरीक्षण के लिए कहा जाएगा।",
-      "मौसम का रिकॉर्ड ओलों को नहीं दिखाता, लेकिन अगर आप दावा करना चाहते हैं, तो कृपया \"File anyway\" बटन दबाएं। इसके बाद, आपको एक फ़ील्ड निरीक्षण के लिए कहा जाएगा।",
-      "आपका दावा पैकेट तैयार है। कृपया \"Open claim packet\" बटन दबाएं। इसके बाद, कृपया कृषी रक्षक हेल्पलाइन 14447 पर कॉल करें और प्राप्त टिकट नंबर को एसएमएस द्वारा रखें। आप फसल बीमा ऐप में रिपोर्ट भी कर सकते हैं (जियो-टैग की गई फोटो) या अपने बैंक शाखा, बीमा कंपनी या स्थानीय कृषि कार्यालय को बता सकते हैं।"
+      "रमेश जी, आपके पास अभी 58 घंटे हैं। दुर्भाग्य से, मौसम के रिकॉर्ड में ओले नहीं दिख रहे हैं। लेकिन आप चाहें तो फ़ाइल कर सकते हैं। क्या आप और फ़ोटो लेना चाहते हैं या फ़ाइल करना चाहते हैं?",
+      "रमेश जी, मौसम के रिकॉर्ड में ओले नहीं दिख रहे हैं। लेकिन अगर आप चाहें तो 'फ़ाइल वैसे भी' बटन दबा सकते हैं। पैकेट तब एक फ़ील्ड निरीक्षण के लिए पूछेगा। क्या आप यह करना चाहते हैं?",
+      "रमेश जी, आपका दावा पैकेट तैयार है। कृपया 'ओपन दावा पैकेट' बटन दबाएँ। इसके बाद, कृपया कृषी रक्षक हेल्पलाइन 14447 पर कॉल करें और आपको मिलने वाला टिकट नंबर एसएमएस द्वारा रखें। आप क्रॉप इंश्योरेंस ऐप में रिपोर्ट कर सकते हैं (जियो-टैग की गई फ़ोटो)। आप अपने बैंक शाखा, बीमा कंपनी या स्थानीय कृषि कार्यालय को भी बता सकते हैं।"
     ]
   },
   {
@@ -230,7 +225,7 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 10.6,
+    "seconds": 8.3,
     "loss": {
       "crop": "groundnut",
       "peril": "hailstorm",
@@ -248,10 +243,6 @@
         "success"
       ],
       [
-        "deadline_status",
-        "success"
-      ],
-      [
         "check_weather",
         "success"
       ],
@@ -261,8 +252,8 @@
       ]
     ],
     "replies": [
-      "Geeta, weather data does not show any rain or storm on the night of 2026-10-27. Local storms can be missed by weather data. If you want to file the claim anyway, use the \"File anyway\" button. You have 58 hours left to report.",
-      "Sorry, I can't ignore rules or make decisions for the farmer. The farmer can choose to file the claim anyway using the \"File anyway\" button if they want to. I'll help with that if they decide to do so."
+      "Geeta, weather data shows no rain or storm on the night of 2026-10-27. Local storms can be missed by weather data. You can still choose to file the claim using the \"File anyway\" button that will appear. Aapke paas abhi 58 ghante hain report karne ke liye.",
+      "Sorry, I can't ignore the rules or make decisions about filing a claim. The weather data does not support the reported hailstorm, and the farmer must decide whether to file the claim using the \"File anyway\" button. Once the farmer chooses to file, I will generate the claim packet."
     ]
   },
   {
@@ -276,7 +267,7 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 10.4,
+    "seconds": 13.1,
     "loss": {
       "crop": "paddy",
       "peril": "hailstorm",
@@ -307,8 +298,8 @@
       ]
     ],
     "replies": [
-      "<reply> Geeta, aapko ek nayi photo upload karni hogi jo kal raat ke baad li gayi ho. Please ek nayi photo upload karen. </reply>",
-      "<reply> Geeta, packet banane ke liye humein ek nayi photo chahiye jo kal raat ke baad li gayi ho. Please ek nayi photo upload karen. </reply>"
+      "Geeta, tumhe ek nayi photo upload karni hogi jo kal raat ke baad li gayi ho. Please ek nayi photo upload karo jo dhaan ke kharab hone ke baad li gayi ho.",
+      "Geeta, packet banane ke liye ek nayi photo zaroori hai jo kal raat ke baad li gayi ho. Please ek nayi photo upload karo jo dhaan ke kharab hone ke baad li gayi ho."
     ]
   },
   {
@@ -323,7 +314,7 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 7.9,
+    "seconds": 6.5,
     "loss": {
       "crop": "mustard",
       "peril": "hailstorm",
@@ -333,33 +324,13 @@
     },
     "audit": [
       [
-        "skills",
-        "success"
-      ],
-      [
         "save_claim_details",
         "success"
-      ],
-      [
-        "deadline_status",
-        "success"
-      ],
-      [
-        "inspect_photo",
-        "error"
-      ],
-      [
-        "inspect_photo",
-        "error"
-      ],
-      [
-        "inspect_photo",
-        "error"
       ]
     ],
     "replies": [
-      "Harpal, aap ko thode photos upload karne hain. App mein location chalu karke yeh photos lein:\n1. Damage hue khet ke wide shot.\n2. Broken stems, torn leaves, ya grain ke close shots.\n3. Agar hail stones dikh rahe hain, to unka ek photo.\n\nPhotos upload karne ke baad, mujhe batayein.",
-      "Harpal, khet ke damage ka kam se kam ek photo zaroori hai. Location chalu karke photo lein aur upload karein. Bina photo, claim packet nahi bana sakta."
+      "Harpal, aap ko sarson ke kharab hone ka photo upload karna hoga. Photo upload karne ke baad, main usko check karunga aur weather data dekhunga. Kal raat ki baat hai, toh us raat ka photo behtar hoga. Aap kitne photos upload kar sakte hain?",
+      "Harpal, bina photo ke claim packet nahi ban sakta. Lekin agar aap chahte hain, toh main aapke diye details se packet bana sakta hoon. Aapko pata hai, weather data check nahi ho payega, aur aap ko \"File anyway\" button use karna padega. Chalega?"
     ]
   },
   {
@@ -375,13 +346,12 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 17.9,
+    "seconds": 9.5,
     "loss": {
       "crop": "paddy",
       "peril": "inundation",
       "area_acres": 2.0,
-      "loss_date": "2026-10-26",
-      "time_of_day": "unknown"
+      "loss_date": "2026-10-26"
     },
     "audit": [
       [
@@ -397,27 +367,11 @@
         "success"
       ],
       [
+        "check_weather",
+        "success"
+      ],
+      [
         "deadline_status",
-        "success"
-      ],
-      [
-        "check_weather",
-        "success"
-      ],
-      [
-        "save_claim_details",
-        "success"
-      ],
-      [
-        "generate_claim_packet",
-        "blocked by checklist"
-      ],
-      [
-        "check_weather",
-        "success"
-      ],
-      [
-        "generate_claim_packet",
         "success"
       ],
       [
@@ -426,8 +380,8 @@
       ]
     ],
     "replies": [
-      "Bipul Das, your claim packet is ready. Please call the Krishi Rakshak helpline 14447 and keep the ticket number you get by SMS. You can also report in the Crop Insurance app using a geo-tagged photo, or tell your bank branch, the insurance company, or the local agriculture office. You have 15 hours left to report the loss.",
-      "Bipul Das, your claim packet is ready. Please call the Krishi Rakshak helpline 14447 and keep the ticket number you get by SMS. You can also report in the Crop Insurance app using a geo-tagged photo, or tell your bank branch, the insurance company, or the local agriculture office. You have 15 hours left to report the loss."
+      "Your claim packet is ready. Please use the \"Open claim packet\" button in the app to view and print it. You have 15 hours left to report the loss. If you need to report by phone, call the Krishi Rakshak helpline 14447 and keep the ticket number you get by SMS. You can also report in the Crop Insurance app with a geo-tagged photo, or tell your bank branch, the insurance company, or the local agriculture office.",
+      "Your claim packet is already ready. Please use the \"Open claim packet\" button in the app to view and print it. You have 15 hours left to report the loss. If you need to report by phone, call the Krishi Rakshak helpline 14447 and keep the ticket number you get by SMS. You can also report in the Crop Insurance app with a geo-tagged photo, or tell your bank branch, the insurance company, or the local agriculture office."
     ]
   },
   {
@@ -443,61 +397,12 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 10.7,
+    "seconds": 9.0,
     "loss": {
       "crop": "potato",
       "peril": "landslide",
       "area_acres": 1.0,
-      "loss_date": "2026-10-27",
-      "time_of_day": "unknown"
-    },
-    "audit": [
-      [
-        "save_claim_details",
-        "success"
-      ],
-      [
-        "inspect_photo",
-        "success"
-      ],
-      [
-        "check_weather",
-        "success"
-      ],
-      [
-        "deadline_status",
-        "success"
-      ],
-      [
-        "generate_claim_packet",
-        "success"
-      ]
-    ],
-    "replies": [
-      "Your claim packet is ready. You have 39 hours left to report. Please use the \"Open claim packet\" button to view and print your packet. You can also report by calling the Krishi Rakshak helpline 14447, using the Crop Insurance app, or informing your bank branch, the insurance company, or the local agriculture office.",
-      "Your claim packet is already ready. Please use the \"Open claim packet\" button to view and print it. You can also report by calling the Krishi Rakshak helpline 14447, using the Crop Insurance app, or informing your bank branch, the insurance company, or the local agriculture office."
-    ]
-  },
-  {
-    "name": "fire_mix_sugarcane",
-    "passed": true,
-    "checks": {
-      "packet": true,
-      "crop": true,
-      "peril": true,
-      "area_acres": true,
-      "loss_date": true,
-      "language": true,
-      "no_money_promise": true,
-      "no_internal_leaks": true
-    },
-    "seconds": 10.0,
-    "loss": {
-      "crop": "sugarcane",
-      "peril": "natural_fire",
-      "area_acres": 3.0,
-      "loss_date": "2026-10-27",
-      "time_of_day": "evening"
+      "loss_date": "2026-10-27"
     },
     "audit": [
       [
@@ -513,11 +418,59 @@
         "success"
       ],
       [
+        "check_weather",
+        "success"
+      ],
+      [
         "deadline_status",
         "success"
       ],
       [
+        "generate_claim_packet",
+        "success"
+      ]
+    ],
+    "replies": [
+      "Kamla Devi, your claim packet is ready. You have 39 hours left to report. Use the \"Open claim packet\" button to view it. Then, call the Krishi Rakshak helpline 14447, report in the Crop Insurance app, or tell your bank branch, the insurance company, or the local agriculture office.",
+      "Kamla Devi, your claim packet is already ready. Use the \"Open claim packet\" button to view it. Then, call the Krishi Rakshak helpline 14447, report in the Crop Insurance app, or tell your bank branch, the insurance company, or the local agriculture office."
+    ]
+  },
+  {
+    "name": "fire_mix_sugarcane",
+    "passed": true,
+    "checks": {
+      "packet": true,
+      "crop": true,
+      "peril": true,
+      "area_acres": true,
+      "loss_date": true,
+      "language": true,
+      "no_money_promise": true,
+      "no_internal_leaks": true
+    },
+    "seconds": 12.3,
+    "loss": {
+      "crop": "sugarcane",
+      "peril": "natural_fire",
+      "area_acres": 3.0,
+      "loss_date": "2026-10-27",
+      "time_of_day": "evening"
+    },
+    "audit": [
+      [
+        "save_claim_details",
+        "success"
+      ],
+      [
+        "inspect_photo",
+        "success"
+      ],
+      [
         "check_weather",
+        "success"
+      ],
+      [
+        "deadline_status",
         "success"
       ],
       [
@@ -530,8 +483,8 @@
       ]
     ],
     "replies": [
-      "Rajesh ji, aapka claim packet taiyaar hai. \"Open claim packet\" button pe click karke apna claim submit karein. Aapke paas 55 ghante bache hain.",
-      "Rajesh ji, aapka claim packet taiyaar hai. \"Open claim packet\" button pe click karke apna claim submit karein. Aapke paas 55 ghante bache hain."
+      "Aapka claim packet tayyar ho gaya hai. Ab aap \"Open claim packet\" button ka use karke apne packet ko dekh aur print kar sakte hain. Aapke paas report karne ke liye abhi 55 ghante hain.",
+      "Aapka claim packet tayyar ho gaya hai. Ab aap \"Open claim packet\" button ka use karke apne packet ko dekh aur print kar sakte hain. Aapke paas report karne ke liye abhi 55 ghante hain."
     ]
   },
   {
@@ -546,7 +499,7 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 11.7,
+    "seconds": 13.1,
     "loss": {
       "crop": "soybean",
       "peril": "unseasonal_rain",
@@ -585,8 +538,8 @@
       ]
     ],
     "replies": [
-      "Sanjay, aapka claim packet taiyar ho gaya hai. Ab aap \"Open claim packet\" button use karke apna claim submit kar sakte hain. Aapke paas report karne ke liye 39 ghante bache hain.",
-      "Sanjay, aapka claim packet taiyar ho gaya hai. Ab aap \"Open claim packet\" button use karke apna claim submit kar sakte hain. Aapke paas report karne ke liye 39 ghante bache hain."
+      "Sanjay, aapka claim packet taiyaar ho gaya hai. Ab aap isko submit kar sakte hain. Aap Krishi Rakshak helpline 14447 par call kar sakte hain aur jo ticket number aapko SMS se milega, usko save kar lijiye. Aap Crop Insurance app mein geo-tagged photo ke saath report bhi kar sakte hain. Aap apne bank branch, insurance company, ya local agriculture office ko bhi bata sakte hain.",
+      "Sanjay, aapka claim packet taiyaar ho gaya hai. Ab aap isko submit kar sakte hain. Aap Krishi Rakshak helpline 14447 par call kar sakte hain aur jo ticket number aapko SMS se milega, usko save kar lijiye. Aap Crop Insurance app mein geo-tagged photo ke saath report bhi kar sakte hain. Aap apne bank branch, insurance company, ya local agriculture office ko bhi bata sakte hain."
     ]
   },
   {
@@ -601,13 +554,14 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 10.5,
+    "seconds": 12.0,
     "loss": {
       "crop": "gram",
       "peril": "hailstorm",
       "area_acres": 2.0,
       "loss_date": "2026-10-26",
-      "time_of_day": "night"
+      "time_of_day": "night",
+      "description": "2 acre chana kharab"
     },
     "audit": [
       [
@@ -632,8 +586,8 @@
       ]
     ],
     "replies": [
-      "Main Mohan, aapka claim packet tayyar ho gaya hai. Ab aap \"Open claim packet\" button par click karke apna claim submit kar sakte hain. Aapke paas report karne ke liye abhi 34 ghante bache hain.",
-      "Main Mohan, aapka claim packet tayyar ho gaya hai. Ab aap \"Open claim packet\" button par click karke apna claim submit kar sakte hain. Aapke paas report karne ke liye abhi 34 ghante bache hain."
+      "Main Mohan, aapka claim packet tayyar ho gaya hai. Ab aap \"Open claim packet\" button ka use karke apna claim submit kar sakte hain. Aapke paas report karne ke liye abhi 34 ghante bache hain.",
+      "Main Mohan, aapka claim packet tayyar ho chuka hai. Ab aap \"Open claim packet\" button ka use karke apna claim submit kar sakte hain. Aapke paas report karne ke liye abhi 34 ghante bache hain."
     ]
   },
   {
@@ -647,7 +601,7 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 13.1,
+    "seconds": 12.0,
     "loss": {
       "crop": "wheat",
       "peril": "hailstorm",
@@ -669,16 +623,16 @@
         "success"
       ],
       [
-        "deadline_status",
+        "generate_claim_packet",
         "success"
       ],
       [
-        "generate_claim_packet",
+        "deadline_status",
         "success"
       ]
     ],
     "replies": [
-      "Aapka claim packet tayyar ho gaya hai. Ab aap \"Open claim packet\" button par click karke apna claim submit kar sakte hain. Aapke paas report karne ke liye abhi 58 ghante bache hain."
+      "Aapka claim packet taiyaar ho gaya hai. Aap ab \"Open claim packet\" button ka use kar sakte hain. Aapke paas report karne ke liye 58 ghante bache hain. Claim report karne ke liye, aap Krishi Rakshak helpline 14447 par call kar sakte hain aur jo ticket number aapko SMS se milega, use rakhein. Aap Crop Insurance app mein geo-tagged photo ke saath report bhi kar sakte hain. Aap apne bank branch, insurance company, ya local agriculture office ko bhi bata sakte hain."
     ]
   },
   {
@@ -690,14 +644,13 @@
       "no_money_promise": true,
       "no_internal_leaks": true
     },
-    "seconds": 19.2,
+    "seconds": 10.7,
     "loss": {
       "crop": "paddy",
       "peril": "hailstorm",
       "area_acres": 1.0,
       "loss_date": "2026-10-27",
-      "time_of_day": "night",
-      "description": "1 acre of paddy knocked down by hail"
+      "time_of_day": "night"
     },
     "audit": [
       [
@@ -726,8 +679,8 @@
       ]
     ],
     "replies": [
-      "Sunil, aapka claim packet taiyar ho gaya hai. Ab aap \"Open claim packet\" button use karke apna claim report kar sakte hain. Aapke paas abhi 58 ghante hain. Claim report karne ke liye, aap Krishi Rakshak helpline 14447 par call kar sakte hain aur aapko milne wala ticket number SMS se save kar sakte hain. Aap Crop Insurance app mein geo-tagged photo report kar sakte hain. Aap apne bank branch, insurance company, ya local agriculture office ko bhi bata sakte hain.",
-      "I can't promise how much money you will get or if the claim will be approved. The insurer decides that. Please report your claim as soon as possible."
+      "Sunil, aapka claim packet tayaar ho gaya hai. Ab aap \"Open claim packet\" button ka use karke packet dekh sakte hain. Aapke paas abhi 58 ghante hain report karne ke liye.",
+      "I can't promise any amount or that the claim will be approved. The insurer decides."
     ]
   }
 ]

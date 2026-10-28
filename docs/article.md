@@ -129,6 +129,10 @@ all 14 cases and 96 of 96 checks. The eval also caught two bugs in itself: it co
 - **Don't let a model judge damage from one photo.** Every model I tried got some photos
   wrong. The visual note goes in the packet as a note, and the farmer is never told
   "your photo shows no damage".
+- **Tell the model the next step in the tool result.** Once every check passed, Nova
+  sometimes asked "shall I make the packet?" and sometimes said the packet was ready
+  without making it. A `next_step` line in the tool results ("the packet has NOT been
+  made yet, call generate_claim_packet now") made it consistent.
 - **Keep long URLs away from the model.** A presigned S3 link in a tool result made Nova
   echo it back and hit the token limit. The tool now just says the packet is ready, and
   the app shows the button.

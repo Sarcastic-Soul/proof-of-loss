@@ -15,6 +15,17 @@ Peril = Literal[tuple(config.PERILS)]
 TimeOfDay = Literal[tuple(evidence.TIME_OF_DAY_START)]
 
 
+READY = ("The packet has NOT been made yet, but everything it needs is in place. Call "
+         "generate_claim_packet now, without asking the farmer first. Do not tell the "
+         "farmer the packet is ready until that tool returns packet_ready.")
+
+
+def ready_hint(claim: dict) -> dict:
+    """Nudge the model to build the packet as soon as the checklist passes; left to
+    itself it sometimes asks the farmer for permission or for more photos first."""
+    return {"next_step": READY} if not claim.get("packet_key") and not gate_problems(claim) else {}
+
+
 @dataclass
 class ClaimContext:
     claim_id: str
@@ -123,7 +134,7 @@ def make_tools(ctx: ClaimContext) -> list:
         # The visual note goes into the packet only. The model does not see it, so it
         # cannot tell a farmer "your photo shows no damage" from one picture.
         return {**{k: photo.get(k) for k in ("taken_at", "time_source", "location", "flags")},
-                "visual_note": "saved for the packet"}
+                "visual_note": "saved for the packet", **ready_hint(claim)}
 
     @tool
     def check_weather() -> dict:
@@ -148,21 +159,23 @@ def make_tools(ctx: ClaimContext) -> list:
         claim["weather"] = {**data, "lat": loc["lat"], "lon": loc["lon"], "peril": loss["peril"],
                             "verdict": verdict, "reason": reason}
         ctx.save(claim)
-        return {"verdict": verdict, "reason": reason, "days": data["days"], "source": data["source"]}
+        return {"verdict": verdict, "reason": reason, "days": data["days"], "source": data["source"],
+                **ready_hint(claim)}
 
     @tool
     def deadline_status() -> dict:
         """Hours left in the 72-hour PMFBY reporting window, and how to report."""
-        loss = ctx.load()["loss"]
+        claim = ctx.load()
+        loss = claim["loss"]
         if not loss.get("loss_date"):
             return {"error": "loss_date not saved yet"}
         info = evidence.deadline_info(loss["loss_date"], loss.get("time_of_day") or "unknown", ctx.now)
-        return {**info, "how_to_report": config.PMFBY_CHANNELS}
+        return {**info, "how_to_report": config.PMFBY_CHANNELS, **ready_hint(claim)}
 
     @tool
     def generate_claim_packet() -> dict:
         """Build the claim packet (an HTML page the farmer can print or show) once all
-        evidence is in place. Returns a link."""
+        evidence is in place. The app then shows the farmer a button to open it."""
         claim = ctx.load()
         problems = gate_problems(claim)
         if problems:  # steering normally stops this earlier; keep the tool safe on its own
