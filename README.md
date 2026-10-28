@@ -38,7 +38,7 @@ Rules the model cannot get around, because they live in code:
   then asks for a field inspection, since weather grids are about 10 km wide and can miss
   a local hailstorm. The agent never rejects a farmer.
 - Photo damage descriptions are notes, not judgements. In our tests every available
-  model made mistakes judging damage from one photo (see `../model-probe`).
+  model made mistakes judging damage from one photo.
 
 ## Run locally
 
