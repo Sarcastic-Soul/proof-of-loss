@@ -13,3 +13,6 @@ agentcore/.cache/
 agentcore/cdk/cdk.out/
 agentcore/cdk/dist/
 node_modules/
+
+# Local design explorations
+design-options/

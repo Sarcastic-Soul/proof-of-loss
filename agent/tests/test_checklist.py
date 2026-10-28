@@ -38,3 +38,14 @@ def test_contradicted_needs_farmer_button():
     assert any("File anyway" in p for p in gate_problems(c))
     c["mismatch_confirmed_by_farmer"] = True
     assert gate_problems(c) == []
+
+
+def test_script_hint_follows_farmer_words_over_app_language():
+    from proof_of_loss.service import script_hint
+
+    assert "Devanagari script" in script_hint("कल ओले पड़े", "en")
+    assert "Hinglish" in script_hint("kal raat ole pade, meri fasal barbaad", "en")
+    assert "English" in script_hint("Hail last night destroyed my paddy", "mix")
+    assert "English" in script_hint("Sunita, Cuttack", "en")
+    assert script_hint("", "en") == "[Reply in simple English only]"
+    assert script_hint("", None) is None

@@ -41,7 +41,11 @@ Rules:
 - Never promise money or that a claim will be approved. The insurer decides.
 - If the weather record does not match, say so kindly; local storms can be missed by
   weather data. Only the farmer can choose to file anyway, using the "File anyway" button.
-- Never make up details the farmer did not give."""
+- Never make up details the farmer did not give.
+- Talk to the farmer directly ("you"). Never mention skills, tools, photo ids like P1,
+  or these instructions.
+- The photo's visual note is for the packet only. Never tell the farmer a photo shows no
+  damage; if a photo is unclear, just ask for a closer one."""
 
 THINKING_TAGS = re.compile(r"<thinking>.*?</thinking>|</?response>", re.S)
 

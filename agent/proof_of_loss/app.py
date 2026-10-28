@@ -1,6 +1,7 @@
 """AgentCore Runtime entrypoint.
 
-Payload: {"claim_id": str, "message": str, "photos": [...], "file_anyway": bool}
+Payload: {"claim_id": str, "message": str, "photos": [...], "file_anyway": bool,
+          "lang": "en" | "hi" | "mix" (the web app's language, used when the message has no words)}
 """
 
 from bedrock_agentcore.runtime import BedrockAgentCoreApp
@@ -22,6 +23,7 @@ def invoke(payload: dict, context) -> dict:
         message=payload.get("message", ""),
         photos=payload.get("photos"),
         file_anyway=bool(payload.get("file_anyway")),
+        lang=payload.get("lang"),
         claims=CLAIMS,
         blobs=BLOBS,
     )

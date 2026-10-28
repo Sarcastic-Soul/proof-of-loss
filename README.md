@@ -105,8 +105,9 @@ curl -X POST "$WEB_URL/api/chat" -H 'content-type: application/json' \
 ## Status
 
 Work in progress for the AWS "Strands SDK: Workshop to Ship" hackathon. Deployed: agent
-runtime, API, storage, placeholder web page. Still to come: web app, Hindi voice notes
-(Amazon Transcribe), deadline reminders, evals.
+runtime, API, storage, and the web app (English, Hindi and Hinglish; phone and desktop
+layouts; voice typing through the browser's speech recognition). Still to come: deadline
+reminders, evals.
 
 ## License
 

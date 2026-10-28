@@ -3,7 +3,8 @@
 Routes (the /api prefix is optional):
     POST /api/claims       -> {"claim_id"}
     POST /api/upload-url   {"claim_id"} -> presigned S3 POST for one photo
-    POST /api/chat         {"claim_id", "message", "photos", "file_anyway"} -> agent reply
+    POST /api/chat         {"claim_id", "message", "photos", "file_anyway", "lang"} -> agent reply
+    POST /api/packet       {"claim_id"} -> fresh link to the claim packet
 
 The agent runs on AgentCore Runtime; the claim id doubles as the runtime session id,
 so every turn of one claim lands in the same session.
@@ -94,8 +95,9 @@ def chat(body: dict) -> dict:
     if not message and not clean_photos and not body.get("file_anyway"):
         raise BadRequest("send a message, a photo, or file_anyway")
 
+    lang = body.get("lang") if body.get("lang") in ("en", "hi", "mix") else None
     payload = {"claim_id": claim_id, "message": message, "photos": clean_photos,
-               "file_anyway": bool(body.get("file_anyway"))}
+               "file_anyway": bool(body.get("file_anyway")), "lang": lang}
     result = agentcore.invoke_agent_runtime(
         agentRuntimeArn=RUNTIME_ARN, runtimeSessionId=claim_id,
         contentType="application/json", accept="application/json",
@@ -110,8 +112,14 @@ def chat(body: dict) -> dict:
     return out
 
 
+def packet(body: dict) -> dict:
+    key = f"packets/{claim_id_from(body)}.html"
+    return {"url": s3.generate_presigned_url(
+        "get_object", Params={"Bucket": BUCKET, "Key": key}, ExpiresIn=3600)}
+
+
 ROUTES = {("POST", "/claims"): new_claim, ("POST", "/upload-url"): upload_url,
-          ("POST", "/chat"): chat}
+          ("POST", "/chat"): chat, ("POST", "/packet"): packet}
 
 
 def handler(event, _context):

@@ -51,7 +51,9 @@ def make_tools(ctx: ClaimContext) -> list:
             village: Village name.
             district: District name.
             state: Indian state.
-            crop: Damaged crop, in English.
+            crop: Damaged crop. Local names: rice/dhaan/chawal = paddy, gehun = wheat,
+                makka = maize, kapas = cotton, sarson = mustard, chana = gram,
+                arhar/tur = pigeon_pea, moongphali = groundnut, ganna = sugarcane.
             peril: Cause of loss.
             area_acres: Damaged area in acres (1 bigha is about 0.62 acre in MP; ask if unsure).
             loss_date: Date of the loss, YYYY-MM-DD. Work it out from words like "kal raat".

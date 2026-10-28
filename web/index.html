@@ -1,12 +1,76 @@
 <!doctype html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Proof of Loss</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#171612">
+<meta name="description" content="Helps Indian farmers file crop-loss claims within the PMFBY 72-hour window, with photo and weather evidence.">
+<title>Proof of Loss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@600;800&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Proof of Loss</h1>
-  <p>The web app is being built. The API lives under <code>/api</code>.</p>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><b>Proof of Loss</b><span data-t="tagline"></span></div>
+    <div class="top-actions">
+      <div class="langs" role="group" aria-label="Language / भाषा">
+        <button type="button" data-lang="en" lang="en">English</button>
+        <button type="button" data-lang="hi" lang="hi">हिन्दी</button>
+        <button type="button" data-lang="mix">Hinglish</button>
+      </div>
+      <button class="new" id="new-claim" type="button"><i class="ph ph-plus"></i><span data-t="newClaim"></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="status" aria-labelledby="status-h">
+    <h2 class="sr" id="status-h" data-t="status"></h2>
+    <section class="sign" id="sign">
+      <small id="sign-label"></small>
+      <div class="count">
+        <span class="num" id="hours">72</span>
+        <span class="unit" id="hours-unit"></span>
+      </div>
+      <p id="sign-note"></p>
+    </section>
+    <ol class="steps" id="steps"></ol>
+    <div class="actions">
+      <button class="anyway" id="file-anyway" type="button" hidden>
+        <i class="ph-bold ph-warning"></i><span data-t="anyway"></span>
+      </button>
+      <a class="packet" id="packet" hidden target="_blank" rel="noopener">
+        <i class="ph-bold ph-file-text"></i><span data-t="packet"></span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="chat" aria-labelledby="chat-h">
+    <h2 class="sr" id="chat-h" data-t="chat"></h2>
+    <section class="log" id="log" aria-live="polite"></section>
+
+    <form class="composer" id="composer">
+      <label class="sr" for="text" data-t="placeholder"></label>
+      <textarea id="text" rows="1" maxlength="2000"></textarea>
+      <button class="send" type="submit"><i class="ph-bold ph-paper-plane-right"></i><span class="sr" data-t="send"></span></button>
+    </form>
+
+    <nav class="bar">
+      <label class="bar-btn" id="photo-btn">
+        <i class="ph ph-camera"></i><span data-t="photo"></span>
+        <input id="photo-input" type="file" accept="image/jpeg" class="sr">
+      </label>
+      <button class="bar-btn" id="mic" type="button" aria-pressed="false"><i class="ph ph-microphone"></i><span id="mic-label"></span></button>
+      <button class="bar-btn type-btn" id="type" type="button"><i class="ph ph-keyboard"></i><span data-t="type"></span></button>
+    </nav>
+  </main>
+</div>
+
+<script src="i18n.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

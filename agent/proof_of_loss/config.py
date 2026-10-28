@@ -27,7 +27,7 @@ PMFBY_CHANNELS = [
 ]
 
 CROPS = [
-    "wheat", "rice", "maize", "soybean", "cotton", "mustard", "gram", "pigeon_pea",
+    "wheat", "paddy", "maize", "soybean", "cotton", "mustard", "gram", "pigeon_pea",
     "groundnut", "sugarcane", "bajra", "jowar", "onion", "potato", "tomato", "other",
 ]
 PERILS = [
