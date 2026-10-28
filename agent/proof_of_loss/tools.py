@@ -90,7 +90,13 @@ def make_tools(ctx: ClaimContext) -> list:
         if loss_date or peril:
             claim["weather"] = None  # inputs changed, so the old check no longer applies
         ctx.save(claim)
-        return {"saved": True, "still_missing": missing_details(claim) + photo_problems(claim)}
+        result = {"saved": True, "still_missing": missing_details(claim) + photo_problems(claim)}
+        if claim["loss"].get("loss_date"):
+            # Give the model the real number so it never guesses the hours left.
+            info = evidence.deadline_info(claim["loss"]["loss_date"],
+                                          claim["loss"].get("time_of_day") or "unknown", ctx.now)
+            result["hours_left"] = info["hours_left"]
+        return result
 
     @tool
     def inspect_photo(photo_id: str) -> dict:
