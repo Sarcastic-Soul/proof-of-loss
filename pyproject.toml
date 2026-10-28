@@ -1,0 +1,31 @@
+[project]
+name = "proof-of-loss"
+version = "0.1.0"
+description = "Strands agent that helps Indian farmers file crop-loss claims within the 72-hour PMFBY window"
+authors = [
+    { name = "Anish Kumar", email = "anishisbusy@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "bedrock-agentcore>=1.25.1",
+    "boto3>=1.43.120",
+    "botocore[crt]>=1.43.120",
+    "pillow>=13.0.0",
+    "strands-agents>=1.62.0",
+]
+
+[project.scripts]
+proof-of-loss = "proof_of_loss:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "tests"]
+testpaths = ["tests"]
