@@ -2,7 +2,7 @@
 
 **Live app:** https://d39zeolevac0dg.cloudfront.net
 **Code (MIT):** https://github.com/Sarcastic-Soul/proof-of-loss
-**Demo video:** VIDEO_LINK
+**Demo video:** https://youtu.be/DrBnMbF4dZo
 
 ## The problem
 

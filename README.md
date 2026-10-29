@@ -110,7 +110,8 @@ Built for the AWS Builder Center "Strands SDK: Workshop to Ship" hackathon.
 - Live app: https://d39zeolevac0dg.cloudfront.net (English, Hindi and Hinglish; phone and desktop layouts)
 - Voice input: the browser records a short clip, Amazon Transcribe turns it into text (hi-IN / en-IN)
 - Deadline reminder: a calendar file with alerts 12 hours and 3 hours before the 72-hour deadline
-- Demo video: VIDEO_LINK
+- Demo video: https://youtu.be/DrBnMbF4dZo
+- Builder Center post: https://builder.aws.com/project/3LKzmx3pnqxNQmk8K7HDXTpT7Mc/proof-of-loss-an-ai-agent-that-helps-farmers-file-crop-insurance-claims-in-72-hours
 - Write-up: [docs/article.md](docs/article.md)
 
 ## Evals
